@@ -6,11 +6,11 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
-      - name: Checking the present date and time
-        run: echo "The current date and time is: $(date)"
+      - name: Running a single command
+        run: echo "This is my first github action command"
 
-      - name: Checking the Hostname
-        run: echo "The hostname of this runner is: $(hostname)"
+      - name: Checking the OS release
+        run: cat /etc/os-release
 
   lint-code-base:
     name: Lint Code Base
