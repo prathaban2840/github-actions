@@ -1,22 +1,28 @@
 name: gitaction
 on: push
 jobs:
-  build:
+  - name: Build and test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: checking the present date and time 
+        run: echo "The current date and time is: $(date)"
+      - name: checking the Hostname
+        run: echo "The hostname of this runner is: $(hostname)"
+  - name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
-      - name: Install dependencies
+      - name: Install flake8
+        run: pip install flake8
+      - name: Lint with flake8
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run tests
-        run: |
-          pytest
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit with status code 1 if there are any linting errors
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  
