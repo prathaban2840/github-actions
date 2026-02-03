@@ -1,0 +1,13 @@
+name: gitaction
+#
+on: push
+
+jobs:
+  job1:
+    - name: job1
+      runs-on:  ubuntu-latest
+     steps:
+      - name: Running a single command
+        run: echo "This is my first github action command"
+      - name: checking the os relase
+        run: cat /etc/os-release
