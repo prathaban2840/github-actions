@@ -1,106 +1,12 @@
-# Funny GitHub Actions demo for a classroom
-# Drop this file into the repo at .github/workflows/funny-demo.yml
-# Triggers on push and pull requests. Shows matrix jobs, conditionals, and silly output.
-name: "Funny Demo CI"
-
-on:
-  push:
-    branches: ["main", "master"]
-  pull_request:
-
+name: gitaction
+on: push
 jobs:
-  joke-matrix:
-    # run the same silly job in two runtimes to demo matrix
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runtime: [bash, python]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Announce the runtime
-        run: echo "\n👋 Running a funny demo using ${{ matrix.runtime }} on $RUNNER_OS\n"
-
-      - name: Tell a random joke (bash)
-        if: matrix.runtime == 'bash'
-        run: |
-          jokes=(
-            "Why do programmers prefer dark mode? Because light attracts bugs. 🐛"
-            "There are 10 types of people: those who understand binary and those who don't. 10/10 would joke again. 😆"
-            "I would tell you a UDP joke, but you might not get it. 📡"
-            "Debugging: Being the detective in a crime movie where you are also the murderer. 🔍"
-          )
-          idx=$(( $(date +%s) % ${#jokes[@]} ))
-          echo "Here's a random joke for you:"; echo
-          echo "${jokes[$idx]}"
-          echo "::notice title=Fun Joke::${jokes[$idx]}"
-
-      - name: Tell a random joke (python)
-        if: matrix.runtime == 'python'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Run Python joke script
-        if: matrix.runtime == 'python'
-        run: |
-          import random
-          jokes = [
-            "Why do programmers prefer dark mode? Because light attracts bugs. 🐛",
-            "There are 10 types of people: those who understand binary and those who don't. 10/10 would joke again. 😆",
-            "I would tell you a UDP joke, but you might not get it. 📡",
-            "Debugging: Being the detective in a crime movie where you are also the murderer. 🔍",
-          ]
-          print("Here's a Python-flavored joke for you:\n")
-          print(random.choice(jokes))
-
-      - name: Lint but be gentle
-        run: |
-          echo "Running a pretend linter..."
-          echo "warning: Line 42: Unnecessarily mysterious variable name 😅"
-          echo "warning: Line 7: Missing semicolon in an ancient language (JK)"
-          exit 0
-
-      - name: Celebrate on push
-        if: github.event_name == 'push'
-        run: |
-          echo "\n🎉 Push detected! Time to celebrate the brave coder who pushed this commit. 🎉"
-          echo "✨✨✨✨✨✨✨✨✨"
-
-      - name: Show runner info (teaching moment)
-        run: |
-          echo "Runner: $RUNNER_NAME" || true
-          echo "OS: $RUNNER_OS" || true
-          echo "Shell: $SHELL" || true
-
-  spooky-check:
-    # an extra tiny job to demo failure vs allowed-failure
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run spooky test (allowed to fail)
-        run: |
-          echo "Running a spooky test that sometimes fails..."
-          if [ $(( $(date +%s) % 2 )) -eq 0 ]; then
-            echo "Boo! The spooky test failed 👻"
-            exit 1
-          else
-            echo "No ghosts today — test passed ✅"
-          fi
-        continue-on-error: true
-
-      - name: Annotate spooky result
-        run: |
-          if [ $(( $(date +%s) % 2 )) -eq 0 ]; then
-            echo "::warning file=spooky.txt::Spooky test failed — but that's okay for a demo."
-          else
-            echo "Spooky test passed — carry on!"
-          fi
-
-# End of workflow - encourage students to tweak it
-# Ideas for class exercises:
-# - Replace jokes with your own, or pull them from a file
-# - Add an approval step for releases
-# - Make the spooky test deterministic for CI practice
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: echo Hello, world!
+      - name: to check the OS version
+        run: cat "/etc/os-release"
