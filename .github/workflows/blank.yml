@@ -19,3 +19,4 @@ jobs:
           pwd
           ls -lrth
           hostname
+          
